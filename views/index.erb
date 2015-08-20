@@ -1,0 +1,22 @@
+<a href="/" class="btn btn-primary">Logout</a>
+
+<form class="pull-center">
+    <input type="text" name="description" placeholder="search note">
+    <button type="submit" class="btn">Search note</button>
+    <hr>
+<ul id="todo-list" class="unstyled">
+  <% @items.each do |item| %>
+    <li id="<%= item[:id] %>">
+    <span class="item">
+      <%= item[:done] ? "<del>#{item[:content]}</del>" : item[:content] %>
+    </span>
+
+    <span class="pull-right">
+      <a href="/delete/<%= item[:id] %>" class="btn btn-danger">Delete</a>
+    </span>
+    
+    </li>
+  <% end %>
+</ul>
+
+<a href="/new" class="btn btn-primary">Add new note</a>
