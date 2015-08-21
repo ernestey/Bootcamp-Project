@@ -1,22 +1,29 @@
-<a href="/" class="btn btn-primary">Logout</a>
+<form class="pull-right" style="margin-left: 10px">
+    <span class="pull-left">
+    <input type="text" name="description" placeholder="search note" class="form-control">
+  </span>
+    <button type="submit" class="btn">Search note</button>   
+    <a href="/" class="btn btn-primary">Logout</a>  
+</form>
+<br>
+<hr>
+    <br>
+ 
+  
 
-<form class="pull-center">
-    <input type="text" name="description" placeholder="search note">
-    <button type="submit" class="btn">Search note</button>
-    <hr>
-<ul id="todo-list" class="unstyled">
+
+<ul class="list-group">
   <% @items.each do |item| %>
-    <li id="<%= item[:id] %>">
-    <span class="item">
-      <%= item[:done] ? "<del>#{item[:content]}</del>" : item[:content] %>
-    </span>
-
-    <span class="pull-right">
-      <a href="/delete/<%= item[:id] %>" class="btn btn-danger">Delete</a>
-    </span>
+    <li id="#" class="list-group-item">
     
+      <a href="/edit/<%= item[:id] %>" class="list-group-item list-group-item-warning"><strong><%= item[:title]%>:</strong> <%= item[:content] %>   </a>
+      <%= item[:created] %>
+    </span>
+    <span class="pull-right">
+      <a href="/delete/<%= item[:id] %>" class="">Delete</a>
+    </span>
     </li>
   <% end %>
 </ul>
 
-<a href="/new" class="btn btn-primary">Add new note</a>
+<a href="/new" class="btn btn-success">Add new note</a>

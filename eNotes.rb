@@ -1,10 +1,12 @@
 require 'sinatra'
 require 'data_mapper'
 require 'sinatra/reloader' if development?
-
-
-DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/todo_list.db")
 enable :sessions
+
+
+DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/eNotes.db")
+
+
 
 class Item 
   include DataMapper::Resource
@@ -51,16 +53,15 @@ end
 post '/home' do
    user = Users.first(:email => params[:email])
   if !user.nil? && user[:password] == params[:password]
-   session[:email] == user[:email]
+   session[:fullname] == user[:fullname]
      redirect '/index'
  else
- #flash[:error] = "emailaddress and passwod Not in existence"
-   redirect '/home'
+ @error = "username and password do not exist. Return home and signup"#flash[:error] = "emailaddress and passwod Not in existence"
+
 end
 end
 
 get '/new' do
-  @title = "Add Note"
   erb :new
 end
 
@@ -79,18 +80,27 @@ post '/new' do
   redirect '/index'
 end
 
-post '/done' do
-  item = Item.first(:id => params[:id])
-  item.done = !item.done
-  item.save
-  content_type 'application/json'
-  value = item.done ? 'done' : 'not done'
-  { :id => params[:id], :status => value }.to_json
-end
-
 get '/delete/:id' do
   @item = Item.first(:id => params[:id].to_i)
   erb :delete
+end
+
+get '/:id' do
+  Item.get params[:id]
+  erb :edit
+end
+
+
+get '/edit/:id' do
+  @item = Item.first(:id => params[:id], :content => params[:content], :created => [:created])
+  erb :edit
+  redirect '/index'
+end
+
+put '/edit/:id' do
+  Item.get(:id => params[:id], :content => params[:content], :created => [:created])
+  erb :edit
+  redirect '/index'
 end
 
 delete '/delete/:id' do
@@ -101,4 +111,5 @@ delete '/delete/:id' do
   else
     redirect '/index'
   end
+
 end
